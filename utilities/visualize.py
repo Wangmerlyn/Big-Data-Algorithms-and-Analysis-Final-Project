@@ -3,7 +3,7 @@ import networkx as nx
 import torch
 
 
-def visualize(h, color, epoch=None, loss=None):
+def visualize_data(h, color, epoch=None, loss=None):
     plt.figure(figsize=(10, 10), dpi=400)
     plt.xticks([])
     plt.yticks([])
@@ -21,4 +21,27 @@ def visualize(h, color, epoch=None, loss=None):
             node_color=color,
             cmap="Set2",
         )
+    plt.show()
+
+
+def tsne_visualize(embeddings, y_pred, y_true):
+    from sklearn.manifold import TSNE
+
+    t_sne = TSNE(n_components=2, init="pca", random_state=42)
+    embeddings_t = t_sne.fit_transform(embeddings)
+    plt.figure(figsize=(10, 10), dpi=400)
+    plt.scatter(
+        embeddings_t[y_pred == y_true, 0],
+        embeddings_t[y_pred == y_true, 1],
+        c=y_pred[y_pred == y_true],
+        # label=y_pred[y_pred == y_true],
+    )
+    plt.scatter(
+        embeddings_t[y_pred != y_true, 0],
+        embeddings_t[y_pred != y_true, 1],
+        c=y_pred[y_pred != y_true],
+        # label=y_pred[y_pred != y_true],
+        marker="x",
+    )
+    plt.legend()
     plt.show()

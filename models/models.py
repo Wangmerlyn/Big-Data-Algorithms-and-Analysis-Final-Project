@@ -8,17 +8,25 @@ from torch_geometric.nn import GATConv, GCNConv
 
 class GAT(torch.nn.Module):
     def __init__(
-        self, num_features, hidden_channels, num_classes, attention_heads=8
+        self,
+        num_features,
+        hidden_channels,
+        num_classes,
+        attention_heads=8,
+        dropout=0.5,
     ):
         super(GAT, self).__init__()
         self.conv1 = GATConv(
-            num_features, hidden_channels, heads=attention_heads, dropout=0.6
+            num_features,
+            hidden_channels,
+            heads=attention_heads,
+            dropout=dropout,
         )
         self.conv2 = GATConv(
             attention_heads * hidden_channels,
             num_classes,
             heads=1,
-            dropout=0.6,
+            dropout=dropout,
         )
 
     def forward(self, x, edge_index):
@@ -26,6 +34,12 @@ class GAT(torch.nn.Module):
         x = F.elu(x)
         x = self.conv2(x, edge_index)
         return F.log_softmax(x, dim=1)
+
+    def get_embedding(self, x, edge_index):
+        x = self.conv1(x, edge_index)
+        x = F.elu(x)
+        x = self.conv2(x, edge_index)
+        return x
 
 
 # The GCN Model
@@ -39,17 +53,23 @@ class GCN(torch.nn.Module):
         self.conv2 = GCNConv(hidden_channels, hidden_channels)
         self.out = Linear(hidden_channels, num_classes)
 
-    def forward(self, x, edge_index):
+    def forward(self, x, edge_index, dropout=0.5):
         # First Message Passing Layer
         x = self.conv1(x, edge_index)
         x = x.relu()
-        x = F.dropout(x, p=0.5, training=self.training)
+        x = F.dropout(x, p=dropout, training=self.training)
 
         # Second Message Passing Layer
         x = self.conv2(x, edge_index)
         x = x.relu()
-        x = F.dropout(x, p=0.5, training=self.training)
+        x = F.dropout(x, p=dropout, training=self.training)
 
         # Output layer
-        x = F.softmax(self.out(x), dim=1)
+        x = F.log_softmax(self.out(x), dim=1)
+        return x
+
+    def get_embedding(self, x, edge_index):
+        x = self.conv1(x, edge_index)
+        x = x.relu()
+        x = self.conv2(x, edge_index)
         return x
