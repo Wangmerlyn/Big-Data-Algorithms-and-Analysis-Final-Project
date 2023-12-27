@@ -34,7 +34,6 @@ class GAT(torch.nn.Module):
 class GCN(torch.nn.Module):
     def __init__(self, num_features, hidden_channels, num_classes):
         super(GCN, self).__init__()
-        torch.manual_seed(42)
 
         self.conv1 = GCNConv(num_features, hidden_channels)
         self.conv2 = GCNConv(hidden_channels, hidden_channels)
