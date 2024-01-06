@@ -82,6 +82,14 @@ class GFusion_1(torch.nn.Module):
         )
         self.out = Linear(hidden_channels, num_classes)
 
+    def get_embedding(self, x, edge_index):
+        x = self.conv1(x, edge_index)
+        x = F.relu(x)
+        x = self.gatconv1(x, edge_index)
+        x = F.elu(x)
+        x = self.gatconv2(x, edge_index)
+        return x
+
     def forward(self, x, edge_index, dropout=0.5):
         # First Message Passing Layer
         x = F.dropout(
@@ -134,15 +142,17 @@ class VanillaGAT(torch.nn.Module):
 
 
 class VanillaGCN(torch.nn.Module):
-    def __init__(self, num_features, hidden_channels, num_classes):
+    def __init__(self, num_features, hidden_channels, num_classes, dropout=0.5):
         super(VanillaGCN, self).__init__()
 
         self.conv1 = GCNConv(num_features, hidden_channels)
         self.conv2 = GCNConv(hidden_channels, hidden_channels)
         self.out = Linear(hidden_channels, num_classes)
+        self.dropout = dropout
 
-    def forward(self, x, edge_index, dropout=0.5):
+    def forward(self, x, edge_index):
         # First Message Passing Layer
+        dropout = self.dropout
         x = self.conv1(x, edge_index)
         x = x.relu()
         x = F.dropout(x, p=dropout, training=self.training)
