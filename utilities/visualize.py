@@ -43,5 +43,5 @@ def tsne_visualize(embeddings, y_pred, y_true):
         # label=y_pred[y_pred != y_true],
         marker="x",
     )
-    plt.legend()
+    # plt.legend()
     plt.show()

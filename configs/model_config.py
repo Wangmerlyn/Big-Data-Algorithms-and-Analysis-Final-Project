@@ -15,7 +15,7 @@ configs = {
 model_key = {
     "VanillaGCN": "vanilla_gcn",
     "VanillaGAT": "vanilla_gat",
-    "GFusion": "gfusion",
+    "GFusion_1": "gfusion",
 }
 
 dataset_key = {

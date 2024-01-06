@@ -30,7 +30,7 @@ def parse_args():
         type=str,
         default="VanillaGAT",
         help="Model to use. Possible values: GFusion, VanillaGAT, VanillaGCN.",
-        choices=["GFusion", "VanillaGAT", "VanillaGCN"],
+        choices=["GFusion_1", "VanillaGAT", "VanillaGCN"],
     )
     parser.add_argument(
         "--epochs", type=int, default=1001, help="Number of epochs to train."
@@ -169,3 +169,4 @@ if __name__ == "__main__":
         .detach(),
         data.y[data.test_mask].cpu().detach(),
     )
+    plt.savefig(f"figs/tsne_{args.model}.png")
