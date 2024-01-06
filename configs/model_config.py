@@ -10,6 +10,17 @@ configs = {
         "attention_heads": 8,
         "dropout": 0.6,
     },
+    "vanilla_gcn_citeseer_config": {"hidden_channels": 16, "dropout": 0.5},
+    "vanilla_gat_citeseer_config": {
+        "hidden_channels": 16,
+        "attention_heads": 8,
+        "dropout": 0.6,
+    },
+    "gfusion_citeseer_config": {
+        "hidden_channels": 32,
+        "attention_heads": 8,
+        "dropout": 0.6,
+    },
 }
 
 model_key = {

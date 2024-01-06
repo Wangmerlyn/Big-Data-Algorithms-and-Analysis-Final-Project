@@ -155,7 +155,7 @@ if __name__ == "__main__":
     )
     figs_folder = "figs"
     os.makedirs(figs_folder, exist_ok=True)
-    plt.savefig(f"figs/loss_vs_epoch_{args.model}.png")
+    plt.savefig(f"figs/loss_vs_epoch_{args.model}_{args.dataset}.png")
 
     plt.cla()
 
@@ -169,4 +169,4 @@ if __name__ == "__main__":
         .detach(),
         data.y[data.test_mask].cpu().detach(),
     )
-    plt.savefig(f"figs/tsne_{args.model}.png")
+    plt.savefig(f"figs/tsne_{args.model}_{args.dataset}.png")
