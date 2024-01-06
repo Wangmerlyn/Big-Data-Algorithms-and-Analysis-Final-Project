@@ -107,8 +107,8 @@ if __name__ == "__main__":
     ).to(device)
 
     # Initialize Optimizer
-    learning_rate = 0.005
-    decay = 5e-4
+    learning_rate = args.lr
+    decay = args.weight_decay
     optimizer = torch.optim.Adam(
         model.parameters(), lr=learning_rate, weight_decay=decay
     )
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     losses = []
     best_val_acc = 0
     best_epoch = 0
-    num_epochs = 2000
+    num_epochs = args.epochs
 
     for epoch in range(0, num_epochs):
         loss = train(model, data, optimizer, criterion)
